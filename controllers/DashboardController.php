@@ -93,7 +93,7 @@ class DashboardController extends Controller
 
         $thisyear  = date('Y');
         $thismonth = date('m');
-        $lastmonth = date('m', strtotime('-1 months', strtotime(date('Y-m-d'))));        
+        $lastmonth = date("m",mktime(0,0,0,date("m")-1,1,date("Y")));
         $user    = Yii::$app->user->identity->id;        
 
 //get current month revenue
@@ -109,7 +109,7 @@ class DashboardController extends Controller
         $all_revenue_command = Yii::$app->db->createCommand("SELECT sum(value) FROM cashbook WHERE user_id = $user AND type_id = 1 AND MONTH(date) < $lastmonth");
         $all_revenue = $all_revenue_command->queryScalar();
 //get previous month expense
-        $lastmonth_expense_command = Yii::$app->db->createCommand("SELECT sum(value) FROM cashbook WHERE user_id = $user AND type_id = 2 AND MONTH(date) = $lastmonth AND YEAR(date) = $thisyear");
+        $lastmonth_expense_command = Yii::$app->db->createCommand("SELECT sum(value) FROM cashbook WHERE user_id = $user AND type_id = 2 AND MONTH(date) = $lastmonth");
         $previousmonth_expense = $lastmonth_expense_command->queryScalar();
 //get all expense exclude previous month
         $all_expense_command = Yii::$app->db->createCommand("SELECT sum(value) FROM cashbook WHERE user_id = $user AND type_id = 2 AND MONTH(date) < $lastmonth");
@@ -222,7 +222,7 @@ class DashboardController extends Controller
         
         $thisyear  = date('Y');
         $thismonth = date('m');
-        $lastmonth = date('m', strtotime('-1 months', strtotime(date('Y-m-d'))));
+        $lastmonth = date("m",mktime(0,0,0,date("m")-1,1,date("Y")));
         $user      = Yii::$app->user->identity->id;
 
         $command = Yii::$app->db->createCommand("SELECT 
